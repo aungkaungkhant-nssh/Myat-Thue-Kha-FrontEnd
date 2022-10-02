@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import CheckOutStep from '../../components/CheckOutStep'
@@ -14,6 +15,11 @@ function Shipping() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  useEffect(()=>{
+    if(!JSON.parse(localStorage.getItem("cartItems")) || JSON.parse(localStorage.getItem("cartItems")).length<=0){
+      navigate('/cart')
+    }
+  },[])
   const onSubmitHandler = (e)=>{
     e.preventDefault();
     if(fullName && address && city && phone){
@@ -55,7 +61,7 @@ function Shipping() {
                         <input type="checkbox" class="form-check-input" value={taxi} onChange={(e)=>setTaxi(!taxi)} />Delivery
                       </label>
                   </div>
-                  <button className='btn btn-block btn-primary' type='submit'>Continue</button>
+                  <button className='btn btn-block btn-primary' type='submit'  disabled={!fullName || !address || !city || !phone}>Continue</button>
                 </form>
               </div>
           </div>
